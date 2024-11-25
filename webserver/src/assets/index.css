@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: Geist;
+}
+
+a.navlink{
+    display: block;
+    width: 130px;
+    padding: 10px 0;
+    text-align: center;
+}
+a.navlink:hover {
+    background: #f3f4f6;
+}
+a.navlink.active {
+    background: #eee;
+}
+
+/* GEIST FONT */
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-Thin.ttf');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-ExtraLight.ttf');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-Light.ttf');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-Medium.ttf');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-SemiBold.ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-Bold.ttf');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-ExtraBold.ttf');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/src/assets/geist_font/Geist-Black.ttf');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* JUA FONT */
+@font-face {
+    font-family: 'Jua';
+    src: url('/src/assets/jua_font/Jua-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
