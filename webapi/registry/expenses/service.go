@@ -2,7 +2,7 @@ package expenses
 
 import (
 	"database/sql"
-	"emnaservices/webapi/internal/datatype"
+	"emnaservices/webapi/internal/database/transaction"
 	"emnaservices/webapi/internal/kernel"
 )
 
@@ -32,9 +32,9 @@ func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) 
 	}
 	defer rows.Close()
 
-	var transactions []datatype.Transaction
+	var transactions []transaction.Transaction
 	for rows.Next() {
-		var txn datatype.Transaction
+		var txn transaction.Transaction
 		err := rows.Scan(&txn.ID, &txn.Description, &txn.Activity, &txn.TotalCost, &txn.PaymentMethod, &txn.Agent, &txn.Status, &txn.IssueDate)
 		if err != nil {
 			return nil, err

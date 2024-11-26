@@ -346,18 +346,46 @@ const mock_data = [
     {
         "id": 0,
         "cin": 0,
-        "fullname": "saif kouki",
-        "phone_number": "29269303",
+        "fullname": "wassim sallemi",
+        "phone_number": "52966902",
         "target_country": "ROMANIA",
         "required_job": "livreur",
         "discount": 0,
         "total_amount": 16000,
         "advenced_payment": 3000,
-        "issue_date": "2024-11-23",
+        "issue_date": "2024-11-25",
+        "due_date": "2025-01-01",
+        "status": "PENDING",
+        "agent": "wael"
+    },
+  {
+        "id": 1,
+        "cin": 0,
+        "fullname": "mohamed boughdira",
+        "phone_number": "22022024",
+        "target_country": "ROMANIA",
+        "required_job": "livreur",
+        "discount": 0,
+        "total_amount": 16000,
+        "advenced_payment": 2000,
+        "issue_date": "2024-11-25",
         "due_date": "2025-01-01",
         "status": "PENDING",
         "agent": "bilel"
+    },  {
+        "id": 3,
+        "cin": 0,
+        "fullname": "nawres bouabid",
+        "phone_number": "28689469",
+        "target_country": "ROMANIA",
+        "required_job": "livreur",
+        "discount": 0,
+        "total_amount": 16000,
+        "advenced_payment": 3000,
+        "issue_date": "2024-11-25",
+        "due_date": "2025-01-01",
+        "status": "PENDING",
+        "agent": "wael"
     },
-
 ]
 export default mock_data;

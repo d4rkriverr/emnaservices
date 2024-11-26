@@ -1,4 +1,5 @@
-const ENDPOINT_URI = "http://emnaservices.online/api"//"http://localhost:8080/api"
+// const ENDPOINT_URI = "http://emnaservices.online/api"
+const ENDPOINT_URI = "http://localhost:8080/api"
 const TOKEN_NAME = "sdhex"
 const AuthToken = {
     GetToken: () => {
