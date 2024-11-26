@@ -28,12 +28,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Create the 'emnaservicescrm' database if it doesn't exist
-	createDBQuery := `CREATE DATABASE IF NOT EXISTS emnaservicescrm;`
-	_, err = db.Exec(createDBQuery)
-	if err != nil {
-		log.Fatal("Error creating the database: ", err)
-	}
 	fmt.Println("Database 'emnaservicescrm' is ready!")
 
 	// Create the 'accounts' table
