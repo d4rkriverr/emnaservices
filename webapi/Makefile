@@ -17,4 +17,4 @@ run: build
 # Run app as deamon
 deamon: build
 	@echo "start the deamon"
-	@nohup {APP_NAME} > server_logs.txt &
+	@nohup $(APP_NAME) > server_logs.txt &
