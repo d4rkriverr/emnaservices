@@ -16,9 +16,9 @@ func init() {
 	}
 }
 func main() {
-	psql := fmt.Sprintf("postgres://%s:%s@localhost:5432/?sslmode=disable", os.Getenv("DBUSER"), os.Getenv("DBPASS"))
+	psql := fmt.Sprintf("postgres://%s:%s@localhost:5432/emnaservicescrm?sslmode=disable", os.Getenv("DBUSER"), os.Getenv("DBPASS"))
 	db, err := sql.Open("postgres", psql)
-	fmt.Printf("Try to connect to postgres server")
+	fmt.Println("Try to connect to postgres server")
 	if err != nil {
 		log.Fatal(err)
 	}
