@@ -3,7 +3,6 @@ package transaction
 import (
 	"database/sql"
 	"fmt"
-	"time"
 )
 
 func CreateTransaction(db *sql.DB, trans Transaction) error {
@@ -19,7 +18,7 @@ func CreateTransaction(db *sql.DB, trans Transaction) error {
 		trans.PaymentMethod,
 		trans.Agent,
 		trans.Status,
-		time.Now().Format("2006-01-02"))
+		trans.IssueDate)
 	if err != nil {
 		return fmt.Errorf("failed to create account: %v", err)
 	}
