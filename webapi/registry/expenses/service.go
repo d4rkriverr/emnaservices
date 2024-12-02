@@ -32,7 +32,7 @@ func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) 
 	}
 	defer rows.Close()
 
-	transactions := []transaction.Transaction{}
+	var transactions = []transaction.Transaction{}
 	for rows.Next() {
 		var txn transaction.Transaction
 		err := rows.Scan(&txn.ID, &txn.Description, &txn.Activity, &txn.TotalCost, &txn.PaymentMethod, &txn.Agent, &txn.Status, &txn.IssueDate)
