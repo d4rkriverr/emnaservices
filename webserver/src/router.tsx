@@ -10,7 +10,6 @@ import AuthPage from "./features/authentication";
 import AuthManager from "./features/auth_manager";
 import DashboardPage from "./features/dashboard";
 import InvoiceListPage from "./features/invoices/list_invoices";
-import ContractsPage from "./features/invoices";
 
 
 const App = () => {
@@ -32,7 +31,7 @@ const App = () => {
             children: [
               { path: "", loader: () => redirect("/invoices/list") },
               { path: "list", index: true, element: < AuthManager element={<InvoiceListPage />} prIndex={1} /> },
-              { path: "old", index: true, element: < AuthManager element={<ContractsPage />} prIndex={1} /> },
+              // { path: "old", index: true, element: < AuthManager element={<ContractsPage />} prIndex={1} /> },
             ]
           },
           {
