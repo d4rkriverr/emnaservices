@@ -1,7 +1,7 @@
 package invoice
 
 type Invoice struct {
-	Id              string `json:"id"`
+	Id              int64  `json:"id"`
 	Fullname        string `json:"fullname"`
 	PhoneNumber     string `json:"phone_number"`
 	ProductName     string `json:"product_name"`
