@@ -8,7 +8,7 @@ const UserLogin = async (username: string, password: string) => {
         if (!res.ok) throw new Error("cannot connect to server");
         return await res.json()
     } catch {
-        return { success: false, message: "error in retrive data." }
+        return { success: false, message: "cannot connect to server" }
     }
 }
 const UserInfo = async () => {

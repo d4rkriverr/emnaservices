@@ -45,6 +45,7 @@ const AuthContextProvider = ({ children }: { children: JSX.Element }) => {
         const res = await accountsService.UserLogin(username, password);
         if (!res.success) {
             setIsAuthed(false);
+            
             return res.message;
         }
         AuthToken.SetToken(res.payload);
