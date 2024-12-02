@@ -26,6 +26,8 @@ func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) 
 		WHERE issue_date BETWEEN $1 AND $2
 		ORDER BY issue_date DESC;
 	`
+	from = "2024-12-1"
+	to = "2024-12-31"
 	rows, err := s.db.Query(query, from, to)
 	if err != nil {
 		return nil, err
