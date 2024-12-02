@@ -7,8 +7,7 @@ const UserLogin = async (username: string, password: string) => {
         const res = await fetch(`${ENDPOINT_URI}/account/auth`, { method: "post", body: JSON.stringify(obj) })
         if (!res.ok) throw new Error("cannot connect to server");
         return await res.json()
-    } catch (e: any) {
-        alert(e.message)
+    } catch {
         return { success: false, message: "error in retrive data." }
     }
 }

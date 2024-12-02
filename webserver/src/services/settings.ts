@@ -1,5 +1,5 @@
 // const ENDPOINT_URI = "http://emnaservices.online/api"
-const ENDPOINT_URI = "http://localhost:8080/api"
+const ENDPOINT_URI = import.meta.env.VITE_API_BASE_URL;
 const TOKEN_NAME = "sdhex"
 const AuthToken = {
     GetToken: () => {
