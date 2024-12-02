@@ -112,9 +112,9 @@ export default function ExpansesDataTable({ data, onCheckAll, onCheckOne }: Para
                         ))}
                     </tbody>
                 </table>
-                <div className="py-2 text-lg text-end font-bold">
+                { /*  <div className="py-2 text-lg text-end font-bold">
                     total: {Intl.NumberFormat("en-US").format([...dataMapper().map((e) => e.total_cost), 0].reduce((a, b) => a + b))} tnd
-                </div>
+                </div> */}
             </div>
         </div>
     )
