@@ -5,6 +5,7 @@ import (
 	"emnaservices/webapi/utils"
 	"encoding/json"
 	"net/http"
+	"fmt"
 )
 
 type Handler struct {
@@ -21,6 +22,7 @@ func (h *Handler) GetExpansesData(w http.ResponseWriter, r *http.Request) {
 
 	data, err := h.service.GetExpensesWithRange(date_from, date_to)
 	if err != nil {
+		fmt.Println(err)
 		utils.RespondWithError(w, 400, err.Error())
 		return
 	}
