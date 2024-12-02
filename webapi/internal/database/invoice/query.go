@@ -3,8 +3,6 @@ package invoice
 import (
 	"database/sql"
 	"fmt"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func CreateInvoice(db *sql.DB, data Invoice) (int64, error) {

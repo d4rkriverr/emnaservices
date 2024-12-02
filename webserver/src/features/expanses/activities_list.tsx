@@ -29,12 +29,12 @@ const ActivitiesList = ({ activities, data, active, selectActivity }: Params) =>
             <div className="flex justify-center items-center py-8 bg-gray-50">
                 <p className="relative text-amber-950 font-bold">
                     <span className="text-3xl">
-                        {Intl.NumberFormat("en-US").format((data).map((e) => e.total_cost).reduce((a, b) => a + b))}
+                        {Intl.NumberFormat("en-US").format([...((data).map((e) => e.total_cost)), 0].reduce((a, b) => a + b))}
                     </span>
                     <span className="absolute text-[10px]">TND</span>
                 </p>
             </div>
-            <hr className="border-2"/>
+            <hr className="border-2" />
             <div className="overflow-auto">
                 <div className="flex justify-between items-center bg-gray-50 p-2">
                     {
