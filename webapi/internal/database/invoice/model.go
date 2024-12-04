@@ -6,7 +6,7 @@ type Invoice struct {
 	PhoneNumber    string `json:"phone_number"`
 	ProductName    string `json:"product_name"`
 	ProductPrice   int64  `json:"product_price"`
-	ProductPayment int64  `json:"product_payment"`
+	ProductPayment string `json:"product_payment"`
 	AdvancePayment int64  `json:"advance_payment"`
 	Agent          string `json:"agent"`
 	IssueDate      string `json:"issue_date"`
