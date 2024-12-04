@@ -104,7 +104,7 @@ const NewInvoicePage = ({ onClose, onCreate, onPrint }: PageState) => {
                 <div className="grid gap-1">
                     <label className="text-xs">Discount Amount:</label>
                     <select name="product_discount" className="border px-2 py-2 rounded-md">
-                        <option value="10">0%</option>
+                        <option value="0">0%</option>
                         <option value="10">10%</option>
                         <option value="20">20%</option>
                         <option value="30">30%</option>
