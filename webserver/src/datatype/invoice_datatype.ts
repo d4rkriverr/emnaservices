@@ -5,7 +5,7 @@ export interface Invoice {
 
     product_name: string;
     product_price: number;
-    product_discount: number;
+    product_payment: string;
     advance_payment: number;
 
     agent: string;

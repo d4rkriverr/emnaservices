@@ -7,12 +7,7 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
     const contentRef = useRef<HTMLDivElement>(null);
     const printInvoice = useReactToPrint({ contentRef })
 
-    const calcDiscount = (p: number, d: number) => {
-        if (d == 0) return p;
-        const pr = p * (d / 100)
-        return p - pr;
-    }
-    const total_amount = calcDiscount(invoice?.product_price ?? 0, invoice?.product_discount ?? 0)
+    const total_amount = (invoice?.product_price ?? 0)
 
     return (
         <div className="w-2/5 bg-white h-full p-10 flex flex-col justify-between gap-5">
@@ -70,7 +65,7 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
                                     <tr className="border-b border--500 bg-blue-50">
                                         <th className="text-start w-4/6 p-2">Product/service</th>
                                         <th className="w-1/4">QTY</th>
-                                        <th className="w-1/4">Discount</th>
+                                        <th className="w-1/4">Method</th>
                                         <th className="w-1/4">Amount</th>
                                     </tr>
                                 </thead>
@@ -78,7 +73,7 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
                                     <tr>
                                         <td className="p-2">{(invoice?.product_name ?? "").split("_").join(" ")}</td>
                                         <td className="w-max text-center">1</td>
-                                        <td className="w-[100px] text-center">{invoice?.product_discount ?? 0}%</td>
+                                        <td className="w-[100px] text-center">{invoice?.product_payment}</td>
                                         <td className="flex text-center p-2">{invoice?.product_price ?? 0} <span className="font-medium pl-1">TND</span></td>
                                     </tr>
                                 </tbody>

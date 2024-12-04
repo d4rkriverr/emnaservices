@@ -30,7 +30,7 @@ const NewInvoicePage = ({ onClose, onCreate, onPrint }: PageState) => {
             phone_number: o.phone_number.toString(),
             product_name: o.product_name.toString(),
             product_price: Number(o.product_price),
-            product_discount: Number(o.product_discount),
+            product_payment: o.product_payment.toString(),
             advance_payment: Number(o.advance_payment),
             agent: o.agent.toString(),
             issue_date: issueDate.split("/").reverse().join("-"),
@@ -102,14 +102,10 @@ const NewInvoicePage = ({ onClose, onCreate, onPrint }: PageState) => {
                     </div>
                 </div>
                 <div className="grid gap-1">
-                    <label className="text-xs">Discount Amount:</label>
-                    <select name="product_discount" className="border px-2 py-2 rounded-md">
-                        <option value="0">0%</option>
-                        <option value="10">10%</option>
-                        <option value="20">20%</option>
-                        <option value="30">30%</option>
-                        <option value="40">40%</option>
-                        <option value="50">50%</option>
+                    <label className="text-xs">Payment method:</label>
+                    <select name="product_payment" className="border px-2 py-2 rounded-md">
+                        <option value="Cash">Cash</option>
+                        <option value="Transfer">Transfer</option>
                     </select>
                 </div>
                 <hr className="my-2 border-gray-300" />
