@@ -17,13 +17,15 @@ const NewInvoicePage = ({ onClose, onCreate, onPrint }: PageState) => {
     const [state, setState] = useState<StateType>({ currentView: 0, message: "", data: null });
     const formRef = useRef<HTMLFormElement>(null)
 
+    const defaultDate = (new Date()).toLocaleDateString().split("/").reverse().join("-")
+
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         setState({ currentView: 1, data: null, message: "" })
         e.preventDefault();
         const o = Object.fromEntries(new FormData(e.currentTarget));
         const issueDate = o.issue_date.toString()
         const obj: Invoice = {
-            id: "0000",
+            id: 0,
             fullname: o.fullname.toString(),
             phone_number: o.phone_number.toString(),
             product_name: o.product_name.toString(),
@@ -117,7 +119,7 @@ const NewInvoicePage = ({ onClose, onCreate, onPrint }: PageState) => {
                 </div>
                 <div className="grid gap-1">
                     <label className="text-xs">Issue Date:</label>
-                    <input type="text" name="issue_date" readOnly value={(new Date()).toLocaleDateString()} className="border text-sm px-2 py-2 rounded-md font-bold text-gray-500 select-none" />
+                    <input type="date" name="issue_date" defaultValue={defaultDate} className="border text-sm px-2 py-2 rounded-md font-bold text-gray-500 select-none" />
                 </div>
                 <br />
                 <button className="bg-black hover:bg-black/80 text-white py-2.5 text-sm rounded-md font-medium border">Sumbit</button>
