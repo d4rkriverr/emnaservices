@@ -121,6 +121,22 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
 const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose: () => void }) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const handlePrint = useReactToPrint({ contentRef })
+
+    const group = () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const r = invoices.reduce((rv: any, x) => {
+            (rv[x.product_payment] = rv[x.product_payment] || []).push(x.advance_payment);
+            return rv;
+        }, {});
+        const obj = [];
+        for (const key in r) {
+            const amount = [...(r[key] as []), 0].reduce((a, b) => a + b)
+            obj.push({ name: key, amount: (amount) })
+        }
+        return (obj);
+    }
+    group()
+
     return (
         <div className="w-2/5 bg-white h-full p-10 flex flex-col justify-between gap-5">
             <h2 className="text-2xl font-semibold flex justify-center items-center gap-2">
@@ -134,11 +150,11 @@ const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose:
                             <thead>
                                 <tr className="[&>*]:border [&>*]:border-gray-500 [&>*]:px-4 [&>*]:py-2">
                                     <th>FullName</th>
-                                    <th>Phone Number</th>
                                     <th>Country</th>
                                     <th>Contract Price</th>
                                     <th>Advance</th>
                                     <th>Agent</th>
+                                    <th>Payment</th>
                                     <th>Issue Date</th>
                                 </tr>
                             </thead>
@@ -147,11 +163,11 @@ const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose:
                                     return (
                                         <tr className="[&>*]:border [&>*]:border-gray-500 [&>*]:px-4 [&>*]:py-2 [&>*]:text-center">
                                             <td>{e.fullname}</td>
-                                            <td>{e.phone_number}</td>
                                             <td>{e.product_name}</td>
                                             <td>{Intl.NumberFormat("en-US").format(e.product_price)}</td>
                                             <td>{Intl.NumberFormat("en-US").format(e.advance_payment)}</td>
                                             <td>{e.agent}</td>
+                                            <td>{e.product_payment}</td>
                                             <td>{(new Date(e.issue_date)).toLocaleDateString('en-CA')}</td>
                                         </tr>
                                     )
@@ -164,10 +180,19 @@ const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose:
                                 <h2 className="mb-5">signature</h2>
                                 <hr className="border-black" />
                             </div>
-                            <div className="text-center">
-                                <h2 className="text-lg">total</h2>
-                                <b>
-                                    {Intl.NumberFormat("en-US").format([...invoices.map((e) => e.advance_payment), 0].reduce((a, b) => a + b))} TND</b>
+                            <div className="text-lg text-start">
+                                {
+                                    group().map((e) => {
+                                        return <h2 className="flex">
+                                            <p className="w-20">{e.name}</p>
+                                            <p>{Intl.NumberFormat("en-US").format(e.amount)} TND</p>
+                                        </h2>
+                                    })
+                                }
+                                <h2 className="font-bold flex">
+                                    <p className="w-20"> Total: </p>
+                                    <p> {Intl.NumberFormat("en-US").format([...group().map((e) => e.amount), 0].reduce((a, b) => a + b))} TND</p>
+                                </h2>
                             </div>
                         </div>
                     </div>
