@@ -6,6 +6,7 @@ import { ExpenseInvoice } from "../../datatype/expenses_datatype";
 import ExpansesDataTable from "./invoices_table";
 import CreateDialog from "./create_dialog";
 import ActivitiesList from "./activities_list";
+import { PrintDailyReport } from "./print_expenses";
 
 interface StateType {
     preload: boolean,
@@ -99,7 +100,6 @@ const ExpansesPage = () => {
         console.log({ dateFrom, dateTo });
     }
 
-
     const onToggleDateDialog = () => {
         setDateFilter((e) => ({ ...e, dialog: !e.dialog }))
     }
@@ -116,6 +116,11 @@ const ExpansesPage = () => {
         setExpenseInvoices(r)
     }
 
+    // ***************************
+    const [openExport, setOpenExport] = useState(false)
+    const toggleOpenExport = () => setOpenExport((e) => !e)
+
+    // ***************************
     if (state.preload) return (
         <div className="flex-1 flex justify-center items-center">
             <div className="w-16 h-16 border-2 border-t-4 border-gray-200 border-t-teal-600 rounded-full animate-spin"></div>
@@ -127,7 +132,7 @@ const ExpansesPage = () => {
             <div className="w-full flex flex-col p-3">
                 <div className="flex flex-col gap-4 lg:flex-row justify-between">
                     <div className="flex-1 flex gap-2 text-xs font-medium">
-                        <button onClick={() => null} className="w-full lg:w-28 py-3 rounded-md bg-black text-white">export</button>
+                        <button onClick={toggleOpenExport} className="w-full lg:w-28 py-3 rounded-md bg-black text-white">export</button>
                         <button onClick={onToggleCreateDialog} className="w-full lg:w-28 py-3 rounded-md bg-purple-800 text-white">New</button>
                     </div>
                     <div className="relative z-10 max-lg:w-full">
@@ -174,6 +179,8 @@ const ExpansesPage = () => {
                 toggleDialog={onToggleCreateDialog}
                 onCreate={onCreateInvoice}
                 onUpdate={GetExpensesAPI} />
+
+            <PrintDailyReport shown={openExport} data={expenseInvoices} onClose={toggleOpenExport} />
         </>
     )
 }

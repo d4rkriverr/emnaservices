@@ -3,6 +3,8 @@ import { useRef } from "react";
 import companyLogo from "../../assets/company_logo.jpg"
 import { Invoice } from "../../datatype/invoice_datatype";
 
+const ParseMoney = (a: number) => Intl.NumberFormat("en-US").format(a);
+
 const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: () => void }) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const printInvoice = useReactToPrint({ contentRef })
@@ -74,7 +76,7 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
                                         <td className="p-2">{(invoice?.product_name ?? "").split("_").join(" ")}</td>
                                         <td className="w-max text-center">1</td>
                                         <td className="w-[100px] text-center">{invoice?.product_payment}</td>
-                                        <td className="flex text-center p-2">{invoice?.product_price ?? 0} <span className="font-medium pl-1">TND</span></td>
+                                        <td className="flex text-center p-2">{ParseMoney(invoice?.product_price ?? 0)} <span className="font-medium pl-1">TND</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -83,16 +85,16 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
                                 <div className="w-2/6">
                                     <div className="flex justify-between pb-2">
                                         <p>Subtotal</p>
-                                        <p>{total_amount} TND</p>
+                                        <p>{ParseMoney(total_amount)} TND</p>
                                     </div>
                                     <div className="flex justify-between pb-2">
                                         <p>Paid</p>
-                                        <p>{invoice?.advance_payment ?? 0} TND</p>
+                                        <p>{ParseMoney(invoice?.advance_payment ?? 0)} TND</p>
                                     </div>
                                     <hr className="border-black font-bold" />
                                     <div className="flex justify-between pt-2 text-sm">
-                                        <b>total</b>
-                                        <b>{total_amount - (invoice?.advance_payment ?? 0)} TND</b>
+                                        <b>Rest</b>
+                                        <b>{ParseMoney(total_amount - (invoice?.advance_payment ?? 0))} TND</b>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +123,6 @@ const PrintInvoice = ({ invoice, onClose }: { invoice: Invoice | null, onClose: 
 const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose: () => void }) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const handlePrint = useReactToPrint({ contentRef })
-
     const group = () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const r = invoices.reduce((rv: any, x) => {
@@ -135,7 +136,6 @@ const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose:
         }
         return (obj);
     }
-    group()
 
     return (
         <div className="w-2/5 bg-white h-full p-10 flex flex-col justify-between gap-5">
@@ -159,13 +159,13 @@ const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose:
                                 </tr>
                             </thead>
                             <tbody>
-                                {invoices.map((e) => {
+                                {invoices.map((e,i) => {
                                     return (
-                                        <tr className="[&>*]:border [&>*]:border-gray-500 [&>*]:px-4 [&>*]:py-2 [&>*]:text-center">
+                                        <tr key={i} className="[&>*]:border [&>*]:border-gray-500 [&>*]:px-4 [&>*]:py-2 [&>*]:text-center">
                                             <td>{e.fullname}</td>
                                             <td>{e.product_name}</td>
-                                            <td>{Intl.NumberFormat("en-US").format(e.product_price)}</td>
-                                            <td>{Intl.NumberFormat("en-US").format(e.advance_payment)}</td>
+                                            <td>{ParseMoney(e.product_price)}</td>
+                                            <td>{ParseMoney(e.advance_payment)}</td>
                                             <td>{e.agent}</td>
                                             <td>{e.product_payment}</td>
                                             <td>{(new Date(e.issue_date)).toLocaleDateString('en-CA')}</td>
@@ -182,16 +182,16 @@ const PrintDailyReport = ({ invoices, onClose }: { invoices: Invoice[], onClose:
                             </div>
                             <div className="text-lg text-start">
                                 {
-                                    group().map((e) => {
-                                        return <h2 className="flex">
+                                    group().map((e,i) => {
+                                        return <h2 key={i} className="flex">
                                             <p className="w-20">{e.name}</p>
-                                            <p>{Intl.NumberFormat("en-US").format(e.amount)} TND</p>
+                                            <p>{ParseMoney(e.amount)} TND</p>
                                         </h2>
                                     })
                                 }
                                 <h2 className="font-bold flex">
                                     <p className="w-20"> Total: </p>
-                                    <p> {Intl.NumberFormat("en-US").format([...group().map((e) => e.amount), 0].reduce((a, b) => a + b))} TND</p>
+                                    <p> {ParseMoney([...group().map((e) => e.amount), 0].reduce((a, b) => a + b))} TND</p>
                                 </h2>
                             </div>
                         </div>
