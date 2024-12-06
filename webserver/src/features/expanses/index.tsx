@@ -51,30 +51,26 @@ const ExpansesPage = () => {
         const dateFrom = DateDataObject.format(0, 1)
         const dateTo = DateDataObject.format(1, 0)
         setDateFilter({ dialog: false, dateFrom, dateTo })
-        GetExpensesAPI(true)
+        const from = DateDataObject.toString(DateDataObject.format(0, 1))
+        const to = DateDataObject.toString(DateDataObject.format(1, 0))
+        GetExpensesAPI(from, to)
     }, []);
 
-    const GetExpensesAPI = (init = false) => {
-        let from = DateDataObject.toString(DateDataObject.format(0, 1))
-        let to = DateDataObject.toString(DateDataObject.format(1, 0))
-        if (!init) {
-            from = DateDataObject.toString(dateFilter.dateFrom)
-            to = DateDataObject.toString(dateFilter.dateTo)
-        }
+    const GetExpensesAPI = (from: string, to: string) => {
+        setState((o) => ({ ...o, preload: true }))
         expansesService.GetExpanses(from, to).then((e) => {
             if (typeof e == "string") return;
             setExpenseInvoices(e.invoices);
             setState((o) => ({ ...o, ...e, preload: false }));
         })
     }
-
+    const updateAfterAdd = () => {
+        GetExpensesAPI(DateDataObject.toString(dateFilter.dateFrom), DateDataObject.toString(dateFilter.dateTo))
+    }
     // **************************
     const onCreateInvoice = async (o: ExpenseInvoice) => {
         delete o.selected;
         const res = await expansesService.CreateExpanses(o);
-        if (res.success) {
-            GetExpensesAPI()
-        }
         return res;
     }
     const onToggleCreateDialog = () => {
@@ -95,8 +91,8 @@ const ExpansesPage = () => {
         const o = Object.fromEntries(new FormData(e.currentTarget))
         const dateFrom = DateDataObject.fromString(o.from.toString())
         const dateTo = DateDataObject.fromString(o.to.toString())
-
         setDateFilter({ dialog: false, dateFrom, dateTo })
+        GetExpensesAPI(DateDataObject.toString(dateFrom), DateDataObject.toString(dateTo))
         console.log({ dateFrom, dateTo });
     }
 
@@ -178,7 +174,7 @@ const ExpansesPage = () => {
                 payMethod={state.payMethod}
                 toggleDialog={onToggleCreateDialog}
                 onCreate={onCreateInvoice}
-                onUpdate={GetExpensesAPI} />
+                onUpdate={updateAfterAdd} />
 
             <PrintDailyReport shown={openExport} data={expenseInvoices} onClose={toggleOpenExport} />
         </>
