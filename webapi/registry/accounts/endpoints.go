@@ -7,6 +7,7 @@ import (
 	"emnaservices/webapi/utils"
 	"encoding/hex"
 	"net/http"
+	"fmt"
 )
 
 type Handler struct {
@@ -77,6 +78,7 @@ func (h *Handler) HandleUserCreate(w http.ResponseWriter, r *http.Request) {
 	sha2 := sha256.New()
 	sha2.Write([]byte(creds.Password))
 	hashedPassword := hex.EncodeToString(sha2.Sum(nil))
+	fmt.Println(hashedPassword)
 	if err = account.CreateAccount(h.db, creds.Username, hashedPassword); err != nil {
 		utils.RespondWithError(w, http.StatusBadRequest, "cannot create account")
 		return
