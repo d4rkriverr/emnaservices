@@ -17,7 +17,7 @@ func NewService(app *kernel.Application) *Service {
 }
 
 func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) {
-	var activities = []string{"office supplies", "staff", "cancelation", "transportation", "rent", "private expenses"}
+	var activities = []string{"office supplies", "staff", "cancelation", "transportation", "sponsoring", "rent", "private expenses"}
 	var paymentMethods = []string{"Credit Card", "Cash", "Bank Transfer"}
 
 	query := `
