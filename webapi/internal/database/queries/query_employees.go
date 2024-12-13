@@ -46,7 +46,7 @@ func (q *QueryEmployees) GetEmployeesWithMonthlyRecords(recordMonth string) ([]m
 	}
 	defer rows.Close()
 
-	var employees []models.Employee
+	employees := []models.Employee{}
 
 	for rows.Next() {
 		var emp models.Employee
