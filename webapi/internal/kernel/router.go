@@ -8,7 +8,7 @@ import (
 
 func Boot() (*Application, error) {
 	router := http.NewServeMux()
-	database, err := database.NewPostgresDB()
+	qmanger, err := database.NewPostgresDB()
 	if err != nil {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func Boot() (*Application, error) {
 			Addr:    ":8080",
 			Handler: utils.CORS(router),
 		},
-		Database: database,
-		Router:   router,
+		QM:     qmanger,
+		Router: router,
 	}, nil
 }

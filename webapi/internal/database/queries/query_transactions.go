@@ -1,22 +1,20 @@
-package expenses
+package queries
 
 import (
 	"database/sql"
-	"emnaservices/webapi/internal/database/transaction"
-	"emnaservices/webapi/internal/kernel"
+	"emnaservices/webapi/internal/database/models"
+	"fmt"
 )
 
-type Service struct {
+type QueryTransactions struct {
 	db *sql.DB
 }
 
-func NewService(app *kernel.Application) *Service {
-	return &Service{
-		db: app.Database,
-	}
+func NewQueryTransactions(db *sql.DB) *QueryTransactions {
+	return &QueryTransactions{db: db}
 }
 
-func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) {
+func (s *QueryTransactions) GetExpensesWithRange(from, to string) (map[string]any, error) {
 	var activities = []string{"office supplies", "staff", "cancelation", "transportation", "sponsoring", "rent", "private expenses"}
 	var paymentMethods = []string{"Credit Card", "Cash", "Bank Transfer"}
 
@@ -32,9 +30,9 @@ func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) 
 	}
 	defer rows.Close()
 
-	var transactions = []transaction.Transaction{}
+	var transactions = []models.Transaction{}
 	for rows.Next() {
-		var txn transaction.Transaction
+		var txn models.Transaction
 		err := rows.Scan(&txn.ID, &txn.Description, &txn.Activity, &txn.TotalCost, &txn.PaymentMethod, &txn.Agent, &txn.Status, &txn.IssueDate)
 		if err != nil {
 			return nil, err
@@ -49,7 +47,22 @@ func (s *Service) GetExpensesWithRange(from, to string) (map[string]any, error) 
 	data := map[string]any{"invoices": transactions, "activities": activities, "payMethod": paymentMethods}
 	return data, nil
 }
-
-func (s *Service) CreateExpansesInvoice() error {
+func (q *QueryTransactions) CreateTransaction(trans models.Transaction) error {
+	query := `
+		INSERT INTO transactions (description, activity, total_cost, payment_method, agent, status, issue_date)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		RETURNING id;
+	`
+	_, err := q.db.Exec(query,
+		trans.Description,
+		trans.Activity,
+		trans.TotalCost,
+		trans.PaymentMethod,
+		trans.Agent,
+		trans.Status,
+		trans.IssueDate)
+	if err != nil {
+		return fmt.Errorf("failed to create account: %v", err)
+	}
 	return nil
 }

@@ -6,17 +6,17 @@ import { PrintDailyReport, PrintInvoice } from "./print_invoice";
 
 const InvoiceListPage = () => {
 
-    useEffect(() => { loadInvoiceFor((new Date()), (new Date()), "") }, [])
+    useEffect(() => { loadInvoiceFor((new Date()), (new Date()), "", "") }, [])
     /* -- */
-    const [state, setState] = useState<{ ready: boolean, data: Invoice[] }>({ ready: false, data: [] })
-    const loadInvoiceFor = async (from: Date, to: Date, val: string) => {
-        setState({ ready: false, data: [] })
-        const r = await invoicesService.GetInvoicesByDates(from.toLocaleDateString('en-CA'), to.toLocaleDateString('en-CA'), val)
+    const [state, setState] = useState<{ ready: boolean, data: Invoice[], agents: string[] }>({ ready: false, data: [], agents: [] })
+    const loadInvoiceFor = async (from: Date, to: Date, val: string, agent: string) => {
+        setState({ ready: false, data: [], agents: [] })
+        const r = await invoicesService.GetInvoicesByDates(from.toLocaleDateString('en-CA'), to.toLocaleDateString('en-CA'), val, agent)
         if (r.success) {
-            setState({ ready: true, data: r.payload })
+            setState({ ready: true, data: r.payload.invoices, agents: r.payload.agents })
             return;
         }
-        setState({ ready: true, data: [] })
+        setState({ ready: true, data: [], agents: [] })
     }
 
     /* -- */
@@ -40,7 +40,7 @@ const InvoiceListPage = () => {
     return (
         <>
             <div className="flex-1 flex items-start gap-3 p-3">
-                <GetDataFilter shown={filterState} onUpdate={loadInvoiceFor} />
+                <GetDataFilter shown={filterState} agents={state.agents} onUpdate={loadInvoiceFor} />
                 <div className="relative flex-1 flex flex-col gap-3">
                     {
                         !state.ready &&
@@ -184,7 +184,7 @@ const InvoiceListPage = () => {
     )
 }
 
-const GetDataFilter = ({ shown, onUpdate }: { shown: boolean, onUpdate: (from: Date, to: Date, val: string) => void }) => {
+const GetDataFilter = ({ shown, agents, onUpdate }: { shown: boolean, agents: string[], onUpdate: (from: Date, to: Date, val: string, agent: string) => void }) => {
     const [load, setLoad] = useState(false);
 
     const onSearch = async (e: FormEvent<HTMLFormElement>) => {
@@ -193,7 +193,7 @@ const GetDataFilter = ({ shown, onUpdate }: { shown: boolean, onUpdate: (from: D
         const o = Object.fromEntries(new FormData(e.currentTarget))
         const dateFrom = (new Date(o.dateFrom.toString()))
         const dateTo = (new Date(o.dateTo.toString()))
-        await onUpdate(dateFrom, dateTo, o.searchValue.toString())
+        await onUpdate(dateFrom, dateTo, o.searchValue.toString(), o.agent.toString())
         setLoad(false)
 
     }
@@ -205,6 +205,13 @@ const GetDataFilter = ({ shown, onUpdate }: { shown: boolean, onUpdate: (from: D
                 <div className="grid gap-1">
                     <label className="text-xs">search</label>
                     <input type="text" name="searchValue" className="border p-2 text-sm" placeholder="search..." />
+                </div>
+                <div className="grid gap-1">
+                    <label className="text-xs">Agent</label>
+                    <select name="agent" className="border p-2 text-sm">
+                        <option value="">All Agent</option>
+                        {agents.map((e) => <option key={e} value={e}>{e}</option>)}
+                    </select>
                 </div>
                 <div className="grid gap-1">
                     <label className="text-xs">date from</label>

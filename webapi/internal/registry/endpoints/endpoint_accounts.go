@@ -1,21 +1,21 @@
-package accounts
+package endpoints
 
 import (
 	"crypto/sha256"
-	"database/sql"
-	"emnaservices/webapi/internal/database/account"
+	"emnaservices/webapi/internal/database"
+	"emnaservices/webapi/internal/database/models"
 	"emnaservices/webapi/utils"
 	"encoding/hex"
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
-type Handler struct {
-	db *sql.DB
+type AccountHandler struct {
+	QueriesManager *database.QueriesManager
 }
 
-func newHandler(db *sql.DB) *Handler {
-	return &Handler{db: db}
+func NewAccountHandler(q *database.QueriesManager) *AccountHandler {
+	return &AccountHandler{QueriesManager: q}
 }
 
 type UserCredentials struct {
@@ -23,9 +23,9 @@ type UserCredentials struct {
 	Password string `json:"password"`
 }
 
-func (h *Handler) HandleUserLogin(w http.ResponseWriter, r *http.Request) {
+func (h *AccountHandler) HandleUserLogin(w http.ResponseWriter, r *http.Request) {
 	var creds UserCredentials
-	var acc account.Account
+	var acc models.Account
 	var err error
 
 	if creds, err = utils.BodyParser[UserCredentials](r.Body); err != nil {
@@ -33,7 +33,7 @@ func (h *Handler) HandleUserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// CHECK IF THE USERNAME CORRECT
-	if acc, err = account.GetOneByUsername(h.db, creds.Username); err != nil {
+	if acc, err = h.QueriesManager.Accounts.GetOneByUsername(creds.Username); err != nil {
 		utils.RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -44,31 +44,30 @@ func (h *Handler) HandleUserLogin(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithError(w, http.StatusBadRequest, "invalid credentials")
 		return
 	}
-
 	// STORE THE ACCESS TOKEN
-	if err = account.UpdateAccessToken(h.db, &acc); err != nil {
+	if err = h.QueriesManager.Accounts.UpdateAccessToken(&acc); err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, "Failed to get token")
 		return
 	}
 	utils.RespondWithSuccess(w, acc.AccessToken)
 }
 
-func (h *Handler) HandleUserInfo(w http.ResponseWriter, r *http.Request) {
-	var acc account.Account
+func (h *AccountHandler) HandleUserInfo(w http.ResponseWriter, r *http.Request) {
+	var acc models.Account
 	var token string
 	var err error
 	if token, err = utils.GetAuthorizationToken(r); err != nil {
 		utils.RespondWithError(w, http.StatusUnauthorized, "Invalid Authorization")
 		return
 	}
-	if acc, err = account.GetOneByToken(h.db, token); err != nil {
+	if acc, err = h.QueriesManager.Accounts.GetOneByToken(token); err != nil {
 		utils.RespondWithError(w, http.StatusUnauthorized, "Invalid Authorization")
 		return
 	}
 	utils.RespondWithSuccess(w, map[string]any{"username": acc.Username, "role": acc.Authorizations})
 }
 
-func (h *Handler) HandleUserCreate(w http.ResponseWriter, r *http.Request) {
+func (h *AccountHandler) HandleUserCreate(w http.ResponseWriter, r *http.Request) {
 	var creds UserCredentials
 	var err error
 	if creds, err = utils.BodyParser[UserCredentials](r.Body); err != nil {
@@ -79,7 +78,7 @@ func (h *Handler) HandleUserCreate(w http.ResponseWriter, r *http.Request) {
 	sha2.Write([]byte(creds.Password))
 	hashedPassword := hex.EncodeToString(sha2.Sum(nil))
 	fmt.Println(hashedPassword)
-	if err = account.CreateAccount(h.db, creds.Username, hashedPassword); err != nil {
+	if err = h.QueriesManager.Accounts.CreateAccount(creds.Username, hashedPassword); err != nil {
 		utils.RespondWithError(w, http.StatusBadRequest, "cannot create account")
 		return
 	}

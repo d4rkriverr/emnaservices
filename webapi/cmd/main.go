@@ -2,9 +2,7 @@ package main
 
 import (
 	"emnaservices/webapi/internal/kernel"
-	"emnaservices/webapi/registry/accounts"
-	"emnaservices/webapi/registry/expenses"
-	"emnaservices/webapi/registry/invoices"
+	"emnaservices/webapi/internal/registry"
 	"emnaservices/webapi/utils"
 	"log"
 
@@ -24,11 +22,12 @@ func main() {
 	}
 
 	// auth middleware
-	authMidd := utils.NewAuthMiddleware(app.Database)
+	authMidd := utils.NewAuthMiddleware(app.QM)
 
-	accounts.BuildAccountService(app, authMidd)
-	expenses.BuildExpenseService(app, authMidd)
-	invoices.BuildInvoiceService(app, authMidd)
+	registry.BuildAccountService(app, authMidd)
+	registry.BuildTransactionService(app, authMidd)
+	registry.BuildInvoiceService(app, authMidd)
+	registry.BuildEmployeeService(app, authMidd)
 	// calllog.BuildCallsService(app)
 
 	go app.Run()

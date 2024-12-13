@@ -2,7 +2,7 @@ package kernel
 
 import (
 	"context"
-	"database/sql"
+	"emnaservices/webapi/internal/database"
 	"fmt"
 	"net/http"
 	"os"
@@ -13,9 +13,9 @@ import (
 
 // Application is our general purpose Application struct
 type Application struct {
-	Server   *http.Server
-	Router   *http.ServeMux
-	Database *sql.DB
+	Server *http.Server
+	Router *http.ServeMux
+	QM     *database.QueriesManager
 }
 
 // Run will run the Application server

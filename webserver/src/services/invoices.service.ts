@@ -17,9 +17,9 @@ const CreateInvoice = async (obj: Invoice) => {
     }
 }
 
-const GetInvoicesByDates = async (from: string, to: string, schVal: string) => {
+const GetInvoicesByDates = async (from: string, to: string, schVal: string, agent: string) => {
     try {
-        const res = await fetch(`${ENDPOINT_URI}/invoices/find?val=${schVal}&start=${from}&end=${to}`,
+        const res = await fetch(`${ENDPOINT_URI}/invoices/find?val=${schVal}&agent=${agent}&start=${from}&end=${to}`,
             {
                 method: "GET",
                 headers: { "Authorization": AuthToken.GetToken() },

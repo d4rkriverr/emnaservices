@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewPostgresDB() (*sql.DB, error) {
+func NewPostgresDB() (*QueriesManager, error) {
 	p1 := fmt.Sprintf("%s:%s", os.Getenv("DBUSER"), os.Getenv("DBPASS"))
 	p2 := fmt.Sprintf("%s:%s", "localhost", os.Getenv("DBPORT"))
 	p3 := fmt.Sprintf("%s?sslmode=disable", os.Getenv("DBNAME"))
@@ -28,5 +28,5 @@ func NewPostgresDB() (*sql.DB, error) {
 		return nil, fmt.Errorf("error connecting to database: %v", err)
 	}
 	fmt.Println("[!] - Database connected: POSTGRES")
-	return db, nil
+	return NewQueriesManager(db), nil
 }

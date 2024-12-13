@@ -2,8 +2,7 @@ package utils
 
 import (
 	"context"
-	"database/sql"
-	"emnaservices/webapi/internal/database/account"
+	"emnaservices/webapi/internal/database"
 	"fmt"
 	"net/http"
 	"strings"
@@ -20,19 +19,19 @@ type key int
 const UserContextKey key = iota
 
 type AuthMiddleware struct {
-	db *sql.DB
+	QM *database.QueriesManager
 }
 
-func NewAuthMiddleware(db *sql.DB) *AuthMiddleware {
+func NewAuthMiddleware(q *database.QueriesManager) *AuthMiddleware {
 	return &AuthMiddleware{
-		db: db,
+		QM: q,
 	}
 }
 
 func (s *AuthMiddleware) Protect(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if token, err := GetAuthorizationToken(r); err == nil {
-			if acc, err := account.GetOneByToken(s.db, token); err == nil {
+			if acc, err := s.QM.Accounts.GetOneByToken(token); err == nil {
 				ctx := context.WithValue(r.Context(), UserContextKey, acc)
 				next.ServeHTTP(w, r.WithContext(ctx))
 				return

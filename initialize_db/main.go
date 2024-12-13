@@ -27,39 +27,18 @@ func main() {
 	if err := db.Ping(); err != nil {
 		log.Fatal(err)
 	}
-
 	fmt.Println("Database 'emnaservicescrm' is ready!")
 
 	// Create the 'accounts' table
-	createAccountsTable := `
-	CREATE TABLE IF NOT EXISTS accounts (
-		id SERIAL PRIMARY KEY,
-		username VARCHAR(255) NOT NULL,
-		password VARCHAR(255) NOT NULL,
-		authorizations VARCHAR(255) NOT NULL,
-		access_token VARCHAR(255) NOT NULL,
-		expired_at TIMESTAMP NOT NULL
-	);`
-	_, err = db.Exec(createAccountsTable)
-	if err != nil {
+	createAccountsTable := ``
+	if _, err = db.Exec(createAccountsTable); err != nil {
 		log.Fatal("Error creating accounts table: ", err)
 	}
 	fmt.Println("Accounts table created successfully!")
 
 	// Create the 'transactions' table
-	createTransactionsTable := `
-	CREATE TABLE IF NOT EXISTS transactions (
-		id SERIAL PRIMARY KEY,
-		description VARCHAR(255) NOT NULL,
-		activity VARCHAR(255) NOT NULL,
-		total_cost FLOAT NOT NULL,
-		payment_method VARCHAR(50) NOT NULL,
-		agent VARCHAR(100) NOT NULL,
-		status VARCHAR(50) NOT NULL,
-		issue_date TIMESTAMP NOT NULL
-	);`
-	_, err = db.Exec(createTransactionsTable)
-	if err != nil {
+	createTransactionsTable := ``
+	if _, err = db.Exec(createTransactionsTable); err != nil {
 		log.Fatal("Error creating transactions table: ", err)
 	}
 	fmt.Println("Transactions table created successfully!")
