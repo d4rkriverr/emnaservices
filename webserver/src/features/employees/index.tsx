@@ -177,6 +177,7 @@ const AddEmployeeForm = ({ shown, onClose }: { shown: boolean, onClose: () => vo
             full_name: o.full_name.toString(),
             phone: o.phone.toString(),
             position: o.position.toString(),
+            salary: Number(o.salary),
             date_of_hire: o.date_of_hire.toString(),
             payment_method: o.payment_method.toString(),
         };
@@ -309,10 +310,17 @@ const UpdateAdvAbsDialog = ({ data, onClose }: { data: any, onClose: () => void;
 
 const MonthlyMetrics = ({ data, date, onClose }: { data: EmployeeWithMonthlyMetrics[], date: string, onClose: () => void }) => {
     const [state, setState] = useState({ isLoad: false, message: "" })
-    const [payload, setPayload] = useState(data.map((e) => ({ ...e, selected: false })))
+    const [payload, setPayload] = useState(data.map((e) => ({
+        id: e.id,
+        fullname: e.full_name,
+        salary: e.monthly_record == undefined ? e.salary : e.monthly_record.salary,
+        monthly_record: e.monthly_record == undefined ? "NO" : "YES",
+        selected: false
+    })))
 
     const onCreate = async () => {
         const obj = (payload.map((e) => ({ id: e.id, salary: e.salary })));
+
         setState({ isLoad: true, message: "" })
         const r = await employeesService.UpdateMonthlyMatric(date, obj)
         if (!r.success) {
@@ -353,14 +361,14 @@ const MonthlyMetrics = ({ data, date, onClose }: { data: EmployeeWithMonthlyMetr
                                         <tr key={e.id} className="[&>*]:p-2 border text-center">
                                             <td><input name="selected" defaultChecked={e.selected} type="checkbox" /></td>
                                             {/* <td><input name="id" defaultValue={e.id} type="text" disabled className="w-10" /></td> */}
-                                            <td>{e.full_name}</td>
+                                            <td>{e.fullname}</td>
                                             <td>
                                                 <input
                                                     onChange={(e) => updateSalary(i, e.currentTarget.value)}
-                                                    defaultValue={e.monthly_record == undefined ? e.salary : e.monthly_record.salary}
+                                                    defaultValue={e.salary}
                                                     className="bg-gray-50 border p-2 w-20" />
                                             </td>
-                                            <td>{e.monthly_record == undefined ? "NO" : "YES"}</td>
+                                            <td>{e.monthly_record}</td>
                                         </tr>
                                     )
                                 })
